@@ -9,6 +9,7 @@ import sys
 from zapv2 import ZAPv2
 
 from .zap_automation import ZapAutomation
+from .zap_newman import run_postman_collection
 
 # set up logging to file - see previous section for more details
 logging.basicConfig(
@@ -58,6 +59,10 @@ def process(args):
         config_dir=args.config_folder,
         target=args.target,
         forced_context=args.context)
+
+    if args.pm_collection:
+        logging.info(':: Running postman collection through ZAP')
+        run_postman_collection(proxy_config=zap_proxy, collection=args.pm_collection, environment=args.pm_environment, extra_args=args.pm_args)
     
     try:
         logging.info(':: Starting SCB ZAP Scan with target %s', args.target)
@@ -119,6 +124,17 @@ def get_parser_args(args=None):
                         choices=['XML', 'JSON', 'HTML', 'MD'],
                         default=None,
                         required=False)
+    pm_args = parser.add_argument_group('Run Postman collections through ZAP')
+    pm_args.add_argument("--pm-collection",
+                        metavar='\b',
+                        help="The Postman collection file or url to run."),
+    pm_args.add_argument("--pm-environment",
+                        metavar='\b',
+                        help="The Postman environment file or url to use with postman collection."),
+    pm_args.add_argument("--pm-args",
+                        metavar='\b',
+                        nargs='+',
+                        help="Additional CLI arguments to use with Newman CLI"),
     return parser.parse_args(args)
 
 if __name__ == '__main__':
