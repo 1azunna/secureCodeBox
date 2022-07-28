@@ -127,12 +127,16 @@ def get_parser_args(args=None):
     pm_args = parser.add_argument_group('Run Postman collections through ZAP')
     pm_args.add_argument("--pm-collection",
                         metavar='\b',
+                        type=str,
                         help="The Postman collection file or url to run."),
     pm_args.add_argument("--pm-environment",
                         metavar='\b',
+                        default=None,
+                        type=str,
                         help="The Postman environment file or url to use with postman collection."),
     pm_args.add_argument("--pm-args",
                         metavar='\b',
+                        default=[],
                         nargs='+',
                         help="Additional CLI arguments to use with Newman CLI"),
     return parser.parse_args(args)

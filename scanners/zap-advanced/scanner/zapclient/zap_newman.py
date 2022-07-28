@@ -3,8 +3,14 @@ import logging
 import subprocess
 from pathlib import Path
 
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s %(name)-12s %(levelname)-8s: %(message)s',
+    datefmt='%Y-%m-%d %H:%M')
 
-def run_postman_collection(self, proxy_config: dict, collection: str, environment: str = None, extra_args: list = []):
+logging = logging.getLogger('zapclient')
+
+def run_postman_collection(proxy_config: dict, collection: str, environment: str = None, extra_args: list = []):
     """Run postman collections through zap using newman cli.
 
     See https://github.com/postmanlabs/newman
